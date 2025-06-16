@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY server.py ./
 
 EXPOSE 4000
-CMD ["python", "server.py"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:4000", "server:app"]
