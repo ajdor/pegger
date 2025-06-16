@@ -97,6 +97,17 @@ def render():
             list_file,
             "-i",
             audio_path,
+            "-filter_complex",
+            "[0:v]"
+            "scale=iw*min(1080/iw\\,1920/ih):ih*min(1080/iw\\,1920/ih)"
+            ",pad=1080:1920:"
+            "(1080-iw*min(1080/iw\\,1920/ih))/2:"
+            "(1920-ih*min(1080/iw\\,1920/ih))/2"
+            ",setsar=1[v]",
+            "-map",
+            "[v]",
+            "-map",
+            "1:a",
             "-c:v",
             "libx264",
             "-r",
@@ -133,7 +144,6 @@ def render():
 
     except subprocess.CalledProcessError:
         abort(500, "FFmpeg render failed")
-    # no finally: cleanup deferred to after_request
 
 
 if __name__ == "__main__":
